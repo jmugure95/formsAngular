@@ -11,15 +11,14 @@ export class AppComponent implements OnInit{
   genders = ['male', 'female'];
   mediums = ['Email', 'Phone'];
   signUpForm: FormGroup;
-  showEmail = false;
-  showPhone = false;
+  forbiddenUNames = ['Kibaki', 'Mwangi'];
 
   constructor(private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.signUpForm = new FormGroup({
-      name: new FormControl(null, Validators.required),
+      name: new FormControl(null, [Validators.required, this.forbiddenNames.bind(this) ]),
       medium: new FormControl(null, Validators.required),
       email: new FormControl(null, [Validators.required, Validators.email]),
       user_pwd: new FormControl(null, Validators.required),
@@ -33,5 +32,13 @@ export class AppComponent implements OnInit{
   onSubmit(): any{
     console.log(this.signUpForm);
   }
+
+  forbiddenNames(control: FormControl): {[s: string]: boolean} {
+    if (this.forbiddenUNames.indexOf(control.value) !== -1) {
+      return {nameforbidden: true};
+    }
+    return null;
+  }
+
 }
 
